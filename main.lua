@@ -1,4 +1,6 @@
 function love.load(arg)
+  height = love.graphics.getHeight()
+  width = love.graphics.getWidth()
   print("Hello World")
 end
 
