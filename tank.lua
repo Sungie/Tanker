@@ -11,7 +11,7 @@ local Tank = {}
     tank.canon.img = nil
     tank.canon.w = 100
     tank.canon.h = tank.h/4
-    tank.canon.angle = 0
+    tank.canon.angle = math.rad(0)
 
     function tank:update(dt)
       tank.y = tank.couloir*height/3 + height/6 - tank.h/2
@@ -46,7 +46,9 @@ local Tank = {}
                        }--]]
       love.graphics.polygon('fill', vertices)
       angleMouse()
-      drawMark()
+      drawMark("parabola")
+      drawMark("targeted")
+
     end
 
     function angleMouse()
@@ -56,18 +58,28 @@ local Tank = {}
       if mouseX > tank.x + tank.w/2 and mouseX < width and alpha <= 0 and alpha >= -math.pi/2
        then
         love.graphics.line(tank.x+tank.w/2, tank.y,mouseX, mouseY)
-        print(alpha)
         tank.canon.angle = -alpha
 
       end
     end
-    function drawMark()
-      love.graphics.setColor(0, 0, 1)
-      local distToBound = width - (tank.x+tank.w/2)
-      local markW = 100
-      local markH = 10
-      print(distToBound)
-      love.graphics.rectangle("fill", tank.x+tank.w/2 + (distToBound -markW)*math.cos(tank.canon.angle), tank.y+tank.h, markW, markH)
+    function drawMark(pType)
+      if pType == "parabola" then
+        love.graphics.setColor(0, 0, 1)
+        local distToBound = width - (tank.x+tank.w/2)
+        local markW = 100
+        local markH = 10
+        love.graphics.rectangle("fill", tank.x+tank.w/2 + (distToBound -markW/2)*math.cos(tank.canon.angle), tank.y+tank.h, markW, markH)
+      end
+      if pType == "targeted" then
+        love.graphics.setColor(0, 1, 1)
+        local markW = 100
+        local markH = height/3
+        local mouseX = love.mouse.getX()
+        local mouseY = love.mouse.getY()
+
+
+        love.graphics.rectangle("fill", mouseX, yToCorridor(mouseY)*height/3, markW, markH)
+      end
     end
 
     function tank:keypressed(key, scancode, isrepeat)

@@ -22,7 +22,6 @@ function love.update(dt)
 
   tank:update(dt)
 
-
 end
 function isInCorridor(pY,corrID)
   local ymin = corrID*height/nbCouloir
@@ -32,8 +31,13 @@ function isInCorridor(pY,corrID)
   return false
 end
 
-function convertCouloirToY(yCouloir)
-  return yCouloir*height/3 + height/6
+function yToCorridor(pY)
+  for i = 0, nbCouloir-1 do
+    local ymin = i*height/nbCouloir
+    local ymax = (i+1) * height/nbCouloir
+    if pY >= ymin and pY < ymax then print(i)return i end
+  end
+  return -1
 end
 
 function love.keypressed(key, scancode, isrepeat)
