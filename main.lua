@@ -2,6 +2,8 @@ local Tank = require "tank"
 local Spells = require "spells"
 local Bullet = require "bullet"
 
+bullets = {}
+
 function love.load(arg)
   width = love.graphics.getWidth()
   height = love.graphics.getHeight()
@@ -12,6 +14,7 @@ function love.load(arg)
   spells = Spells:new()
 
   spellSelected = nil
+
 end
 
 function love.draw()
@@ -26,6 +29,9 @@ function love.draw()
       spell.draw()
     end
   end
+  for b,lBullet in pairs(bullets) do
+    lBullet:draw()
+  end
 
 end
 
@@ -33,6 +39,9 @@ function love.update(dt)
   tank:update(dt)
   for s,spell in pairs(spells) do
     spell.update()
+  end
+  for b,lBullet in pairs(bullets) do
+    lBullet:update(dt)
   end
 end
 function isInCorridor(pY,corrID)
@@ -54,7 +63,8 @@ end
 function  love.mousepressed(x, y, button, isTouch)
   for s,spell in pairs(spells) do
     if spell.handled and button == 1 then
-      print("FIRE: ".. spell.name.." launched")
+      fire(spell)
+      print("FIRE: ".. spell.name.." launched, type: "..spell.type)
       spell.handled = false
     end
   end

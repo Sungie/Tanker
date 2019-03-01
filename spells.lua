@@ -1,3 +1,5 @@
+local Bullet = require "bullet"
+
 local Spells = {}
 function Spells:new()
   local spells = {
@@ -45,6 +47,12 @@ function Spells:new()
   }
 
   return spells
+end
+function fire(pSpell)
+  if pSpell.type == "line" then
+    local balle = Bullet:new(tank.canon.sortie.x,tank.canon.sortie.y,tank.canon.angle)
+    table.insert(bullets,balle)
+  end
 end
 
 function drawMark(pType)
