@@ -45,42 +45,26 @@ local Tank = {}
                          self.y + tank.canon.h*math.cos(tank.canon.angle)
                        }--]]
       love.graphics.polygon('fill', vertices)
+
       angleMouse()
-      drawMark("parabola")
-      drawMark("targeted")
+      --drawMark("parabola")
+      --drawMark("targeted")
 
     end
 
     function angleMouse()
       local mouseX = love.mouse.getX()
       local mouseY = love.mouse.getY()
-      local alpha = math.atan2(mouseY-tank.y , mouseX- (tank.x + tank.w/2))
-      if mouseX > tank.x + tank.w/2 and mouseX < width and alpha <= 0 and alpha >= -math.pi/2
-       then
-        love.graphics.line(tank.x+tank.w/2, tank.y,mouseX, mouseY)
-        tank.canon.angle = -alpha
+      local alpha = math.atan2(height-mouseY  , mouseX)
+        love.graphics.line(0, height,mouseX, mouseY)
+        tank.canon.angle =alpha
 
-      end
+
+
+    --[[ --]]
     end
-    function drawMark(pType)
-      if pType == "parabola" then
-        love.graphics.setColor(0, 0, 1)
-        local distToBound = width - (tank.x+tank.w/2)
-        local markW = 100
-        local markH = 10
-        love.graphics.rectangle("fill", tank.x+tank.w/2 + (distToBound -markW/2)*math.cos(tank.canon.angle), tank.y+tank.h, markW, markH)
-      end
-      if pType == "targeted" then
-        love.graphics.setColor(0, 1, 1)
-        local markW = 100
-        local markH = height/3
-        local mouseX = love.mouse.getX()
-        local mouseY = love.mouse.getY()
 
-
-        love.graphics.rectangle("fill", mouseX, yToCorridor(mouseY)*height/3, markW, markH)
-      end
-    end
+    
 
     function tank:keypressed(key, scancode, isrepeat)
       if (key == "z" or key == "up") and tank.couloir > 0 then tank.couloir = tank.couloir - 1 end
