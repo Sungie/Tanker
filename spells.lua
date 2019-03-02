@@ -6,7 +6,7 @@ function Spells:new()
 
     spell1 = {
       key = "1",
-      name = "Tir Auto", dammage = 1, cd = 1, size = 1, type = "line",
+      name = "Canon", dammage = 2, cd = 1, size = 1, type = "line",
       handled = false,
 
       draw = function()
@@ -38,9 +38,9 @@ function Spells:new()
       update = function() end
     },
     spell = {
-      name = "", dammage = 1, cd = 1, size = 1, type = "",
+      name = "Tir Auto", dammage = 1, cd = 0, size = 1, type = "line",
 
-      draw = function() end,
+      draw = function() drawMark("line") end,
       update = function()  end,
     }
 

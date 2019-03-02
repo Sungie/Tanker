@@ -47,8 +47,8 @@ local Tank = {}
                          self.y + tank.canon.h*math.cos(tank.canon.angle)
                        }--]]
       love.graphics.polygon('fill', vertices)
-
-      love.graphics.circle("fill", tank.canon.sortie.x,tank.canon.sortie.y, 10)
+      --draw sortie canon
+      --love.graphics.circle("fill", tank.canon.sortie.x,tank.canon.sortie.y, 10)
       angleMouse()
 
     end
@@ -56,9 +56,12 @@ local Tank = {}
     function angleMouse()
       local mouseX = love.mouse.getX()
       local mouseY = love.mouse.getY()
-      local alpha = math.atan2(height-mouseY  , mouseX)
-        love.graphics.line(0, height,mouseX, mouseY)
-        tank.canon.angle =alpha
+      --local alpha = math.atan2(height-mouseY  , mouseX)
+      local alpha = math.atan2(-tank.y + mouseY  , mouseX - tank.x)
+        --love.graphics.line(0, height,mouseX, mouseY)
+        if -alpha *180/math.pi <= 90 and -alpha *180/math.pi >= 0 then
+          tank.canon.angle = -alpha
+        end
     end
 
     function tank:keypressed(key, scancode, isrepeat)
