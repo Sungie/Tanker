@@ -1,8 +1,9 @@
 local Tank = require "tank"
 local Spells = require "spells"
 local Bullet = require "bullet"
-
+local Ennemy = require "ennemy"
 bullets = {}
+ennemies = {}
 
 function love.load(arg)
   width = love.graphics.getWidth()
@@ -15,6 +16,9 @@ function love.load(arg)
 
   spellSelected = nil
 
+  ennemy = Ennemy:new()
+  table.insert(ennemies,ennemy)
+
 end
 
 function love.draw()
@@ -26,11 +30,14 @@ function love.draw()
   tank:draw()
   for s,spell in pairs(spells) do
     if spell.handled then
-      spell.draw()
+      spell.draw(spell)
     end
   end
   for b,lBullet in pairs(bullets) do
     lBullet:draw()
+  end
+  for e,ennemy in pairs(ennemies) do
+    ennemy:draw()
   end
 
 end
@@ -38,11 +45,25 @@ end
 function love.update(dt)
   tank:update(dt)
   for s,spell in pairs(spells) do
-    spell.update()
+    spell.update(spell,dt)
   end
   for b,lBullet in pairs(bullets) do
-    lBullet:update(dt)
+    if lBullet.x < 0 or lBullet.x > width or lBullet.y < 0 or lBullet.y > height then
+      lBullet:removeBullet()
+    else
+      lBullet:update(dt)
+      for e,ennemy in pairs(ennemies) do
+        if lBullet:touch(ennemy) then
+          print("touche")
+          ennemy:hit(lBullet.dammage)
+          lBullet:removeBullet()
+        end
+      end
+    end
   end
+    for e,ennemy in pairs(ennemies) do
+      ennemy:update(dt)
+    end
 end
 function isInCorridor(pY,corrID)
   local ymin = corrID*height/nbCouloir
@@ -73,9 +94,14 @@ function love.keypressed(key, scancode, isrepeat)
   if key == "escape" then love.event.quit() end
   tank:keypressed(key, scancode, isrepeat)
   for s,spell in pairs(spells) do
-      if key == spell.key  then
-        resetOtherSpellHandled(spell)
-        spell.handled = not spell.handled
+      if key == spell.key then
+        if spell.ready then
+          resetOtherSpellHandled(spell)
+          spell.handled = not spell.handled
+        else
+          print("CD: "..math.ceil(spell.cd - spell.timeCd ).." left.")
+
+        end
       end
 
   end

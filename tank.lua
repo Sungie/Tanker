@@ -3,7 +3,7 @@ local Tank = {}
   function Tank:new()
     local tank = {}
     tank.x = 100
-    tank.couloir = 0
+    tank.couloir = 2
     tank.w = 100
     tank.h = 100
     tank.speed = 20
@@ -65,8 +65,8 @@ local Tank = {}
     end
 
     function tank:keypressed(key, scancode, isrepeat)
-      if (key == "z" or key == "up") and tank.couloir > 0 then tank.couloir = tank.couloir - 1 end
-      if (key == "s" or key == "down") and tank.couloir < nbCouloir-1 then tank.couloir = tank.couloir + 1 end
+      if (key == "z" or key == "up") and tank.couloir > 0 then tank.couloir = tank.couloir - 1 tank.canon.angle = 0 end
+      if (key == "s" or key == "down") and tank.couloir < nbCouloir-1 then tank.couloir = tank.couloir + 1 tank.canon.angle = 0 end
     end
 
     return tank
